@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Student GPT — Login</title>
+    <meta name="description" content="Login to Student GPT chatbot" />
+    <style>
+      /* Theme variables */
+      :root {
+        --bg-start: #0f0f14;
+        --bg-end: #1a1a20;
+        --panel-bg: linear-gradient(145deg, #111217, #1b1b22);
+        --accent: #8a63d2;
+        --accent-2: #7b58bb;
+        --text-primary: #e8e8ee;
+        --muted: #9aa0b4;
+        --card-border: rgba(255, 255, 255, 0.06);
+        --input-bg: rgba(255, 255, 255, 0.02);
+        --link-color: #cdb8ff;
+      }
+
+      /* Light mode overrides (variables only) */
+      body.light-mode {
+        --bg-start: #f4f7ff;
+        --bg-end: #fff7f1;
+        --panel-bg: linear-gradient(180deg, #ffffff, #fffaf6);
+        --accent: #e91e63;
+        --accent-2: #cf6679;
+        --text-primary: #111;
+        --muted: #5b5b66;
+        --card-border: rgba(0, 0, 0, 0.06);
+        --input-bg: #ffffff;
+        --link-color: #7a4fd2;
+      }
+
+      /* Basic reset */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+        color: var(--text-primary);
+        background: radial-gradient(
+            1200px 600px at 10% 20%,
+            rgba(138, 99, 210, 0.06),
+            transparent
+          ),
+          linear-gradient(135deg, var(--bg-start), var(--bg-end));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+
+      /* Layout */
+      .page-wrap {
+        width: 100%;
+        max-width: 420px;
+      }
+      .card {
+        background: var(--panel-bg);
+        border-radius: 20px;
+        padding: 28px;
+        border: 1px solid var(--card-border);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+      }
+
+      h1 {
+        font-size: 20px;
+        margin-bottom: 12px;
+        color: var(--text-primary);
+      }
+      .lead {
+        color: var(--muted);
+        margin-bottom: 18px;
+      }
+
+      /* Inputs */
+      label {
+        display: block;
+        font-size: 13px;
+        color: var(--text-primary);
+        margin-bottom: 6px;
+        font-weight: 600;
+      }
+      .field {
+        margin-bottom: 14px;
+      }
+      input[type="email"],
+      input[type="password"],
+      input[type="text"] {
+        width: 100%;
+        padding: 12px 14px;
+        background: var(--input-bg);
+        color: var(--text-primary);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        border-radius: 12px;
+        outline: none;
+        transition: box-shadow 0.18s, border-color 0.18s;
+        font-size: 14px;
+      }
+      input::placeholder {
+        color: var(--muted);
+      }
+      input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 6px 20px rgba(138, 99, 210, 0.12);
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+        padding: 12px 16px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 14px;
+      }
+      .btn-primary {
+        width: 100%;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        color: #fff;
+        box-shadow: 0 8px 28px rgba(138, 99, 210, 0.18);
+      }
+      .btn-primary:active {
+        transform: translateY(1px);
+      }
+      .small-link {
+        color: var(--link-color);
+        text-decoration: none;
+        font-size: 13px;
+      }
+      .small-link:hover {
+        text-decoration: underline;
+      }
+
+      hr.sep {
+        margin: 18px 0;
+        border: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.04);
+      }
+
+      /* Logo (fixed top-left) */
+      #logo-link {
+        position: fixed;
+        top: 18px;
+        left: 18px;
+        display: inline-block;
+        text-decoration: none;
+      }
+      #logo-link img {
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
+        border: 3px solid var(--accent);
+        box-shadow: 0 6px 20px rgba(138, 99, 210, 0.18);
+        display: block;
+      }
+
+      /* Theme toggle (fixed top-right) */
+      #mode-btn {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.02);
+        color: var(--text-primary);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        cursor: pointer;
+        font-weight: 600;
+      }
+      body.light-mode #mode-btn {
+        background: #fff;
+        color: var(--text-primary);
+        border: 1px solid var(--card-border);
+      }
+
+      /* Responsive */
+      @media (max-width: 520px) {
+        .card {
+          padding: 20px;
+          border-radius: 16px;
+        }
+        #logo-link img {
+          width: 72px;
+          height: 72px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Clickable logo (fixed) -->
+    <a
+      id="logo-link"
+      href="landing.html"
+      title="Go to landing page"
+      aria-label="Go to landing page"
+    >
+      <img src="Actual.png" alt="Student GPT logo" />
+    </a>
+
+    <!-- Theme toggle -->
+    <button
+      id="mode-btn"
+      type="button"
+      aria-pressed="false"
+      title="Toggle theme"
+    >
+      Toggle Theme
+    </button>
+
+    <div class="page-wrap" role="main" aria-labelledby="login-heading">
+      <div class="card" role="region" aria-label="Login panel">
+        <h1 id="login-heading">Welcome back</h1>
+        <p class="lead">
+          Sign in to continue to Student GPT — your AI assistant for projects
+          and code.
+        </p>
+
+        <!-- Login form -->
+        <form
+          id="loginForm"
+          novalidate
+          autocomplete="on"
+          aria-describedby="login-help"
+        >
+          <div class="field">
+            <label for="login-email">Email</label>
+            <input
+              id="login-email"
+              name="email"
+              type="email"
+              inputmode="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="login-password">Password</label>
+            <input
+              id="login-password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <button class="btn btn-primary" type="submit" aria-label="Sign in">
+              Sign In
+            </button>
+          </div>
+
+          <div
+            class="meta-row"
+            id="login-help"
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <a class="small-link" href="ResetPassword.html">Forgot password?</a>
+            <a class="small-link" href="signup.html">Create account</a>
+          </div>
+
+          <hr class="sep" />
+
+          <p style="color: var(--muted); font-size: 13px; margin-top: 8px">
+            By signing in you agree to our
+            <a class="small-link" href="terms.html">Terms</a> and
+            <a class="small-link" href="privacy.html">Privacy Policy</a>.
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <noscript>
+      <div
+        style="
+          position: fixed;
+          bottom: 18px;
+          left: 18px;
+          background: #222;
+          padding: 8px 12px;
+          border-radius: 8px;
+          color: #fff;
+        "
+      >
+        JavaScript is required for this site. Please enable JavaScript in your
+        browser.
+      </div>
+    </noscript>
+
+    <script>
+      // fallback: apply saved theme (keeps visual correct if login.js didn't load)
+      try {
+        const saved = localStorage.getItem("theme");
+        if (saved === "light") document.body.classList.add("light-mode");
+        else document.body.classList.remove("light-mode");
+      } catch (e) {
+        /* ignore */
+      }
+    </script>
+
+    <!-- Primary login logic (handles theme toggle and login) -->
+    <script src="login.js" defer></script>
+  </body>
+</html>
+  

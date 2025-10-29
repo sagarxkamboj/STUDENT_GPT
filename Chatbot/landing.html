@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>StudentGPT — Learn. Code. Create.</title>
+    <meta name="description" content="StudentGPT: AI assistant for students" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-1: #06070a;
+        --bg-2: #0f1622;
+        --card: #0e1220;
+        --muted: #9aa0b4;
+        --text: #e8eef8;
+        --accent: #6f4bb0;
+        --accent-2: #9a6bff;
+        --glass: rgba(255, 255, 255, 0.04);
+        --radius: 14px;
+      }
+      body.light-mode {
+        --bg-1: #f6f8fb;
+        --bg-2: #ffffff;
+        --card: #ffffff;
+        --muted: #6b7280;
+        --text: #0b1220;
+        --glass: rgba(10, 10, 10, 0.04);
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+        background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+        color: var(--text);
+        padding: 36px;
+        transition: background 0.3s, color 0.3s;
+      }
+      .wrap {
+        max-width: 1180px;
+        margin: 0 auto;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: inherit;
+      }
+      .logo {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      }
+      .brand-title .title {
+        font-weight: 700;
+        font-size: 20px;
+      }
+      .brand-title .sub {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      nav {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .nav-link {
+        color: var(--muted);
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.15s;
+      }
+      .nav-link:hover {
+        background: var(--glass);
+        color: var(--text);
+      }
+      .btn {
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: none;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .btn-primary {
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        color: #fff;
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid var(--glass);
+        color: var(--text);
+      }
+
+      /* Hero */
+      .hero {
+        display: grid;
+        grid-template-columns: 1fr 440px;
+        gap: 28px;
+        align-items: center;
+        margin-top: 40px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--glass);
+        padding: 28px;
+        border-radius: var(--radius);
+      }
+      .eyebrow {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(154, 107, 255, 0.08);
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 12px;
+      }
+      h1 {
+        font-size: 34px;
+        margin: 14px 0 10px;
+      }
+      p.lead {
+        color: var(--muted);
+        font-size: 15px;
+        max-width: 64ch;
+      }
+      .hero-ctas {
+        display: flex;
+        gap: 12px;
+        margin-top: 18px;
+        flex-wrap: wrap;
+      }
+      .visual {
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--glass);
+        height: 360px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .visual img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* Sections */
+      section {
+        margin-top: 80px;
+      }
+      h2 {
+        font-size: 28px;
+        margin-bottom: 16px;
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      .feature {
+        background: var(--card);
+        border-radius: 12px;
+        padding: 16px;
+        border: 1px solid var(--glass);
+      }
+      .feature h3 {
+        margin: 0;
+        font-size: 18px;
+      }
+      .feature p {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      /* About */
+      .about p {
+        max-width: 70ch;
+        line-height: 1.6;
+        color: var(--muted);
+      }
+      .about ul {
+        margin-top: 16px;
+        line-height: 1.8;
+        color: var(--muted);
+        padding-left: 20px;
+      }
+
+      /* Why Choose Us */
+      .why .card {
+        margin-top: 10px;
+      }
+
+      /* Testimonials */
+      .testimonials {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+      .testimonial {
+        background: var(--card);
+        border: 1px solid var(--glass);
+        border-radius: 12px;
+        padding: 16px;
+      }
+      .testimonial p {
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .testimonial strong {
+        display: block;
+        margin-top: 10px;
+        color: var(--text);
+      }
+
+      /* Contact */
+      .contact form {
+        display: grid;
+        gap: 12px;
+        max-width: 500px;
+      }
+      .contact input,
+      .contact textarea {
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid var(--glass);
+        background: var(--bg-2);
+        color: var(--text);
+      }
+      .contact button {
+        width: fit-content;
+      }
+
+      footer {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid var(--glass);
+        color: var(--muted);
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      footer a {
+        color: var(--muted);
+        text-decoration: none;
+      }
+
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+        .features {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 600px) {
+        .features {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <a class="brand" href="#">
+          <span class="logo"
+            ><img src="Actual.png" alt="logo" width="36"
+          /></span>
+          <div class="brand-title">
+            <div class="title">StudentGPT</div>
+            <div class="sub">AI for students</div>
+          </div>
+        </a>
+        <nav>
+          <a class="nav-link" href="#features">Features</a>
+          <a class="nav-link" href="#about">About</a>
+          <a class="nav-link" href="#why">Why Us</a>
+          <a class="nav-link" href="#testimonials">Testimonials</a>
+          <a class="nav-link" href="#contact">Contact</a>
+          <button id="mode-btn" class="btn btn-outline">🌙</button>
+        </nav>
+      </header>
+
+      <!-- Hero -->
+      <section class="hero">
+        <div class="card">
+          <span class="eyebrow">Student Edition</span>
+          <h1>AI help that ships your homework & teaches you</h1>
+          <p class="lead">
+            Generate runnable code, get explanations, and plan projects with
+            StudentGPT. Tuned for coursework, labs and capstones.
+          </p>
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href="Login.html">Get Started</a>
+            <a class="btn btn-outline" href="#features">Explore</a>
+          </div>
+        </div>
+        <div class="visual card">
+          <img src="Actual.png" alt="StudentGPT preview" />
+        </div>
+      </section>
+
+      <!-- Features -->
+      <section id="features">
+        <h2>Key Features</h2>
+        <div class="features">
+          <div class="feature">
+            <h3>💡 Runnable Code</h3>
+            <p>Examples with comments and tests for Python, JS, and Java.</p>
+          </div>
+          <div class="feature">
+            <h3>🛠 Smart Debugging</h3>
+            <p>Minimal patches with short root-cause explanations.</p>
+          </div>
+          <div class="feature">
+            <h3>📅 Project Planner</h3>
+            <p>Convert ideas into milestones and starter code.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- About -->
+      <section id="about" class="about">
+        <h2>About StudentGPT</h2>
+        <p>
+          StudentGPT is built with one mission — to make learning faster,
+          smarter, and more fun for students. Unlike generic AI tools, it’s
+          tuned especially for academic needs.
+        </p>
+        <ul>
+          <li>
+            📘 <strong>Focused on Students:</strong> Covers assignments, coding,
+            projects, and exam prep.
+          </li>
+          <li>
+            ⚡ <strong>Time Saver:</strong> Provides concise, direct answers
+            without wasting your time.
+          </li>
+          <li>
+            💡 <strong>Learn While You Do:</strong> Explains concepts step by
+            step — not just giving solutions.
+          </li>
+          <li>
+            🛠 <strong>Practical Help:</strong> Runnable code, debugging, and
+            project scaffolds ready to use.
+          </li>
+          <li>
+            🌍 <strong>Always Available:</strong> 24/7 AI buddy for your
+            coursework and learning journey.
+          </li>
+        </ul>
+      </section>
+
+      <!-- Why Choose Us -->
+      <section id="why" class="why">
+        <h2>Why Choose StudentGPT?</h2>
+        <div
+          style="
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          "
+        >
+          <div class="card">
+            <h3>🚀 Boost Productivity</h3>
+            <p class="muted">
+              Finish your homework, labs, and assignments faster while actually
+              learning.
+            </p>
+          </div>
+          <div class="card">
+            <h3>🎯 Reliable & Accurate</h3>
+            <p class="muted">
+              Tailored for students, so responses are clear, concise, and
+              focused on education.
+            </p>
+          </div>
+          <div class="card">
+            <h3>🤝 Trusted by Peers</h3>
+            <p class="muted">
+              Thousands of students already use StudentGPT to simplify their
+              studies and projects.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Testimonials -->
+      <section id="testimonials" class="testimonials">
+        <h2>What Students Say</h2>
+        <div class="testimonials">
+          <div class="testimonial">
+            <p>
+              "StudentGPT made my coding assignments 10x easier. It not only
+              gave the solution but also explained why."
+            </p>
+            <strong>— Rahul, Computer Science Student</strong>
+          </div>
+          <div class="testimonial">
+            <p>
+              "Best AI tool for exam prep! Quick summaries and practice
+              questions saved me hours of study time."
+            </p>
+            <strong>— Priya, BBA Student</strong>
+          </div>
+          <div class="testimonial">
+            <p>
+              "I use it daily for project planning. It literally acts like a
+              mentor, helping me structure my tasks."
+            </p>
+            <strong>— Aman, Engineering Student</strong>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section id="contact" class="card" style="margin-top: 24px">
+        <h3>Contact us</h3>
+        <p class="muted">
+          Send your name, email and message — it will be delivered to the
+          StudentGPT team.
+        </p>
+
+        <form
+          id="contactForm"
+          style="margin-top: 12px; display: grid; gap: 10px; max-width: 640px"
+        >
+          <input
+            name="name"
+            id="contact-name"
+            required
+            placeholder="Your name"
+            style="
+              padding: 10px;
+              border-radius: 8px;
+              border: 1px solid rgba(255, 255, 255, 0.04);
+              background: transparent;
+              color: inherit;
+            "
+          />
+          <input
+            name="email"
+            id="contact-email"
+            type="email"
+            required
+            placeholder="Your email"
+            style="
+              padding: 10px;
+              border-radius: 8px;
+              border: 1px solid rgba(255, 255, 255, 0.04);
+              background: transparent;
+              color: inherit;
+            "
+          />
+          <textarea
+            name="message"
+            id="contact-message"
+            rows="5"
+            required
+            placeholder="Your message"
+            style="
+              padding: 10px;
+              border-radius: 8px;
+              border: 1px solid rgba(255, 255, 255, 0.04);
+              background: transparent;
+              color: inherit;
+            "
+          ></textarea>
+
+          <div style="display: flex; gap: 10px; align-items: center">
+            <button type="submit" class="btn btn-primary">Send message</button>
+            <div id="contactStatus" class="muted" style="font-size: 14px"></div>
+          </div>
+        </form>
+      </section>
+
+      <!-- Footer -->
+      <footer>
+        <div>© StudentGPT · Developed by <strong>Sagar Kamboj</strong></div>
+        <div>
+          <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      const modeBtn = document.getElementById("mode-btn");
+      const body = document.body;
+
+      modeBtn.addEventListener("click", () => {
+        body.classList.toggle("light-mode");
+        if (body.classList.contains("light-mode")) {
+          modeBtn.textContent = "🌞";
+        } else {
+          modeBtn.textContent = "🌙";
+        }
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("contactForm");
+        if (!form) return;
+        const status = document.getElementById("contactStatus");
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          status.textContent = "Sending...";
+          const payload = {
+            name: document.getElementById("contact-name").value.trim(),
+            email: document.getElementById("contact-email").value.trim(),
+            message: document.getElementById("contact-message").value.trim(),
+          };
+
+          try {
+            const res = await fetch("/api/contact", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const json = await res.json();
+            if (res.ok && json.ok) {
+              status.textContent = "Message sent — thank you.";
+              form.reset();
+            } else {
+              status.textContent = "Send failed. Try again later.";
+              console.error(json);
+            }
+          } catch (err) {
+            status.textContent = "Send failed. Check network.";
+            console.error(err);
+          }
+          setTimeout(() => (status.textContent = ""), 5000);
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Student GPT — Sign Up</title>
+    <meta name="description" content="Create an account for Student GPT" />
+    <style>
+      :root{
+        --bg-start:#0f0f14;
+        --bg-end:#1a1a20;
+        --panel-bg:linear-gradient(145deg,#111217,#1b1b22);
+        --accent:#8a63d2;
+        --accent-2:#7b58bb;
+        --text-primary:#e8e8ee;
+        --muted:#9aa0b4;
+        --card-border:rgba(255,255,255,0.06);
+        --input-bg:rgba(255,255,255,0.02);
+        --link-color:#cdb8ff;
+        --error:#ff6b6b;
+      }
+      body.light-mode{
+        --bg-start:#f4f7ff; --bg-end:#fff7f1;
+        --panel-bg:linear-gradient(180deg,#ffffff,#fffaf6);
+        --accent:#e91e63; --accent-2:#cf6679;
+        --text-primary:#111; --muted:#5b5b66; --link-color:#7a4fd2;
+        --input-bg:#fff;
+      }
+
+      *{box-sizing:border-box;margin:0;padding:0}
+      html,body{height:100%}
+      body{
+        font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+        color:var(--text-primary);
+        background:radial-gradient(1200px 600px at 10% 20%, rgba(138,99,210,0.06), transparent), linear-gradient(135deg,var(--bg-start),var(--bg-end));
+        display:flex;align-items:center;justify-content:center;padding:24px;
+      }
+
+      #logo-link{position:fixed;top:18px;left:18px;text-decoration:none}
+      #logo-link img{width:88px;height:88px;border-radius:50%;border:3px solid var(--accent);box-shadow:0 6px 20px rgba(138,99,210,0.18);display:block}
+
+      #mode-btn{position:fixed;top:18px;right:18px;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,0.02);color:var(--text-primary);border:1px solid rgba(255,255,255,0.04);cursor:pointer;font-weight:600}
+      body.light-mode #mode-btn{background:#fff;color:var(--text-primary);border:1px solid rgba(0,0,0,0.06)}
+
+      .page-wrap{width:100%;max-width:520px}
+      .card{background:var(--panel-bg);border-radius:20px;padding:28px;border:1px solid var(--card-border);box-shadow:0 12px 40px rgba(0,0,0,0.45)}
+      .card h1{font-size:22px;margin-bottom:8px;color:var(--text-primary)}
+      .lead{color:var(--muted);margin-bottom:18px}
+
+      .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+      .field{margin-bottom:14px}
+      label{display:block;font-size:13px;color:var(--text-primary);margin-bottom:6px;font-weight:600}
+      input[type="text"],input[type="email"],input[type="tel"],input[type="password"],input[type="number"]{
+        width:100%;padding:12px 14px;background:var(--input-bg);color:var(--text-primary);border:1px solid rgba(255,255,255,0.04);border-radius:12px;outline:none;transition:box-shadow .18s,border-color .18s;font-size:14px;
+      }
+      input::placeholder{color:var(--muted)}
+      input:focus{border-color:var(--accent);box-shadow:0 6px 20px rgba(138,99,210,0.12)}
+
+      .btn{display:inline-flex;align-items:center;justify-content:center;border:none;cursor:pointer;padding:12px 16px;border-radius:12px;font-weight:700;font-size:14px}
+      .btn-primary{width:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;box-shadow:0 8px 28px rgba(138,99,210,0.18)}
+      .btn-ghost{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04);padding:8px 10px;border-radius:8px}
+      .hint{font-size:13px;color:var(--muted);margin-top:6px}
+      .small-link{color:var(--link-color);text-decoration:none;font-size:13px}
+      .small-link:hover{text-decoration:underline}
+      .social{flex:1;padding:10px;border-radius:10px;background:rgba(255,255,255,0.02);text-align:center;color:var(--muted);cursor:pointer;border:1px solid rgba(255,255,255,0.03)}
+      .sep{margin:18px 0;border:none;border-top:1px solid rgba(255,255,255,0.04)}
+      .msg{font-size:13px;margin-top:8px;color:var(--muted)}
+      .error{color:var(--error);font-size:13px;margin-top:8px}
+
+      /* OTP specific improved styles */
+      .otp-panel{margin-top:12px;padding:14px;border-radius:12px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.03);display:none}
+      .otp-info{font-size:13px;color:var(--muted);margin-bottom:10px}
+      .otp-row{display:flex;gap:10px;align-items:center}
+      .otp-row input{
+        flex:1;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);font-size:16px;background:var(--input-bg);color:var(--text-primary
+      }
+      .otp-row .btn-verify{
+        min-width:130px;padding:11px 14px;border-radius:10px;font-weight:700;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;border:none;cursor:pointer;
+        box-shadow:0 8px 22px rgba(138,99,210,0.18);height:100%;
+      }
+      .otp-actions{display:flex;align-items:center;gap:12px;margin-top:10px}
+      .resend-link{background:transparent;border:none;color:var(--link-color);cursor:pointer;padding:6px 8px;border-radius:8px;font-weight:600}
+      .resend-link[disabled]{opacity:.5;cursor:not-allowed}
+      .resend-timer{font-size:13px;color:var(--muted)}
+
+      @media (max-width:600px){.form-grid{grid-template-columns:1fr}.card{padding:20px;border-radius:16px}#logo-link img{width:72px;height:72px}.otp-row{flex-direction:column}.otp-row .btn-verify{width:100%;min-width:0}}
+    </style>
+  </head>
+  <body>
+    <a
+      id="logo-link"
+      href="landing.html"
+      title="Go to landing page"
+      aria-label="Go to landing page"
+      ><img src="Actual.png" alt="Student GPT logo"
+    /></a>
+    <button
+      id="mode-btn"
+      type="button"
+      aria-pressed="false"
+      title="Toggle theme"
+    >
+      Toggle Theme
+    </button>
+
+    <main class="page-wrap">
+      <section class="card" aria-labelledby="signup-heading">
+        <h1 id="signup-heading">Create your account</h1>
+        <p class="lead">
+          Join Student GPT to get help with projects, code and ideas.
+        </p>
+
+        <form id="signupForm" autocomplete="on" novalidate>
+          <div class="form-grid">
+            <div class="field">
+              <label for="signup-name">Full name</label>
+              <input
+                id="signup-name"
+                name="name"
+                type="text"
+                placeholder="First Last"
+                required
+              />
+            </div>
+            <div class="field">
+              <label for="signup-phone">Phone (10 digits, optional)</label>
+              <input
+                id="signup-phone"
+                name="phone"
+                type="tel"
+                inputmode="numeric"
+                placeholder="9876543210"
+                pattern="[0-9]{10}"
+                maxlength="10"
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="signup-email">Email</label>
+            <input
+              id="signup-email"
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="signup-password">Password</label>
+              <input
+                id="signup-password"
+                name="password"
+                type="password"
+                placeholder="Min 8 chars, 1 uppercase"
+                required
+              />
+            </div>
+            <div class="field">
+              <label for="signup-confirm">Confirm password</label>
+              <input
+                id="signup-confirm"
+                name="confirm"
+                type="password"
+                placeholder="Repeat password"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <button id="signup-btn" class="btn btn-primary" type="submit">
+              Create account
+            </button>
+            <div class="hint">
+              By creating an account you agree to our
+              <a class="small-link" href="terms.html">Terms</a> and
+              <a class="small-link" href="privacy.html">Privacy</a>.
+            </div>
+            <div
+              id="form-error"
+              class="error"
+              role="status"
+              aria-live="polite"
+              style="display: none"
+            ></div>
+          </div>
+
+          <div id="otpPanel" class="otp-panel" aria-hidden="true">
+            <div class="otp-info" id="otpInfo">
+              A 6-digit code was sent to your email. Enter it below to verify.
+            </div>
+
+            <div class="otp-row">
+              <input
+                id="otpInput"
+                type="text"
+                inputmode="numeric"
+                maxlength="6"
+                placeholder="Enter OTP"
+              />
+              <button id="verifyOtpBtn" class="btn-verify" type="button">
+                Verify OTP
+              </button>
+            </div>
+
+            <div class="otp-actions">
+              <button id="resendOtpBtn" class="resend-link" type="button">
+                Resend
+              </button>
+              <div id="resendTimer" class="resend-timer"></div>
+              <div
+                id="otp-error"
+                class="error"
+                style="display: none; margin-left: auto"
+              ></div>
+            </div>
+          </div>
+
+          <hr class="sep" />
+
+          <div class="actions">
+            <div style="flex: 1">
+              <span class="hint">Already have an account?</span>
+              <div><a class="small-link" href="Login.html">Sign in</a></div>
+            </div>
+            <div style="width: 180px">
+              <div class="social-row">
+                <div class="social" role="button" tabindex="0">
+                  Continue with Google
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        const API_BASE = "http://localhost:4000";
+        const form = document.getElementById("signupForm");
+        const nameEl = document.getElementById("signup-name");
+        const phoneEl = document.getElementById("signup-phone");
+        const emailEl = document.getElementById("signup-email");
+        const passEl = document.getElementById("signup-password");
+        const confirmEl = document.getElementById("signup-confirm");
+        const formError = document.getElementById("form-error");
+        const otpPanel = document.getElementById("otpPanel");
+        const otpInput = document.getElementById("otpInput");
+        const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+        const resendOtpBtn = document.getElementById("resendOtpBtn");
+        const resendTimer = document.getElementById("resendTimer");
+        const otpError = document.getElementById("otp-error");
+        const modeBtn = document.getElementById("mode-btn");
+
+        try {
+          const saved = localStorage.getItem("theme");
+          if (saved === "light") document.body.classList.add("light-mode");
+        } catch (e) {}
+
+        if (modeBtn) {
+          modeBtn.addEventListener("click", () => {
+            const isLight = document.body.classList.toggle("light-mode");
+            localStorage.setItem("theme", isLight ? "light" : "dark");
+            modeBtn.setAttribute("aria-pressed", !!isLight);
+          });
+        }
+
+        function showFormError(msg) {
+          formError.style.display = "block";
+          formError.textContent = msg;
+        }
+        function clearFormError() {
+          formError.style.display = "none";
+          formError.textContent = "";
+        }
+        function showOtpError(msg) {
+          otpError.style.display = "block";
+          otpError.textContent = msg;
+        }
+        function clearOtpError() {
+          otpError.style.display = "none";
+          otpError.textContent = "";
+        }
+
+        let resendCountdown = 0,
+          resendInterval = null;
+        function startResendTimer(seconds = 60) {
+          clearInterval(resendInterval);
+          resendCountdown = seconds;
+          resendTimer.textContent = `You can resend in ${resendCountdown}s`;
+          resendOtpBtn.disabled = true;
+          resendInterval = setInterval(() => {
+            resendCountdown--;
+            if (resendCountdown <= 0) {
+              clearInterval(resendInterval);
+              resendTimer.textContent = "";
+              resendOtpBtn.disabled = false;
+            } else
+              resendTimer.textContent = `You can resend in ${resendCountdown}s`;
+          }, 1000);
+        }
+
+        async function sendOtp(email) {
+          const res = await fetch(API_BASE + "/send-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+          });
+          if (!res.ok) {
+            const t = await res.text().catch(() => "");
+            throw new Error(t || `HTTP ${res.status}`);
+          }
+          return res.json().catch(() => ({}));
+        }
+        async function verifyOtpRequest(email, otp) {
+          const res = await fetch(API_BASE + "/verify-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, otp }),
+          });
+          if (!res.ok) {
+            const t = await res.text().catch(() => "");
+            throw new Error(t || `HTTP ${res.status}`);
+          }
+          return res.json().catch(() => ({}));
+        }
+        async function signupFinal(payload) {
+          const res = await fetch(API_BASE + "/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          if (!res.ok) {
+            const t = await res.text().catch(() => "");
+            throw new Error(t || `HTTP ${res.status}`);
+          }
+          return res.json().catch(() => ({}));
+        }
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          clearFormError();
+          clearOtpError();
+          const name = nameEl.value.trim();
+          const phoneRaw = phoneEl.value.trim();
+          const email = emailEl.value.trim();
+          const password = passEl.value;
+          const confirm = confirmEl.value;
+          if (!name || !email || !password || !confirm) {
+            showFormError("Please fill required fields.");
+            return;
+          }
+          const phoneDigits = phoneRaw.replace(/\D/g, "");
+          if (phoneRaw && phoneDigits.length !== 10) {
+            showFormError("Phone must be exactly 10 digits or leave empty.");
+            return;
+          }
+          if (password !== confirm) {
+            showFormError("Passwords do not match.");
+            return;
+          }
+          if (password.length < 8) {
+            showFormError("Password must be at least 8 characters.");
+            return;
+          }
+
+          try {
+            const btn = document.getElementById("signup-btn");
+            btn.disabled = true;
+            await sendOtp(email);
+            otpPanel.style.display = "block";
+            otpPanel.setAttribute("aria-hidden", "false");
+            document.getElementById(
+              "otpInfo"
+            ).textContent = `A 6-digit code was sent to ${email}. Enter it below to verify.`;
+            startResendTimer(60);
+            btn.disabled = false;
+            otpInput.focus();
+          } catch (err) {
+            console.error("send-otp error:", err);
+            showFormError(
+              "Failed to send OTP: " + (err.message || "Check server")
+            );
+            document.getElementById("signup-btn").disabled = false;
+          }
+        });
+
+        verifyOtpBtn.addEventListener("click", async () => {
+          clearOtpError();
+          const email = emailEl.value.trim();
+          const otp = (otpInput.value || "").trim();
+          if (!otp || otp.length < 4) {
+            showOtpError("Enter the OTP sent to your email.");
+            return;
+          }
+          verifyOtpBtn.disabled = true;
+          try {
+            await verifyOtpRequest(email, otp);
+            const payload = {
+              name: nameEl.value.trim(),
+              email: email,
+              password: passEl.value,
+            };
+            const phoneDigits = phoneEl.value.trim().replace(/\D/g, "");
+            if (phoneDigits) payload.phone = phoneDigits;
+            const signupRes = await signupFinal(payload);
+            const token = signupRes.token || signupRes.accessToken || "";
+            if (token) {
+              const displayName =
+                signupRes.name ||
+                payload.name.split(" ")[0] ||
+                email.split("@")[0];
+              localStorage.setItem("token", token);
+              localStorage.setItem("userName", displayName);
+              localStorage.setItem("userEmail", email);
+              localStorage.setItem(
+                "user",
+                JSON.stringify({ name: displayName, email })
+              );
+              alert("Account created. Redirecting...");
+              window.location.href = "index.html";
+            } else {
+              alert("Account created. Please login.");
+              window.location.href = "Login.html";
+            }
+          } catch (err) {
+            console.error("verify-otp/signup error:", err);
+            showOtpError(
+              "OTP verification or signup failed: " +
+                (err.message || "Check server")
+            );
+          } finally {
+            verifyOtpBtn.disabled = false;
+          }
+        });
+
+        resendOtpBtn.addEventListener("click", async () => {
+          clearOtpError();
+          const email = emailEl.value.trim();
+          if (!email) {
+            showOtpError("Email missing.");
+            return;
+          }
+          resendOtpBtn.disabled = true;
+          try {
+            await sendOtp(email);
+            startResendTimer(60);
+          } catch (err) {
+            console.error("resend error:", err);
+            showOtpError("Resend failed: " + (err.message || "Check server"));
+            resendOtpBtn.disabled = false;
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,500 @@
+<!-- ...existing code... -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student GPT | AI Assistant</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --background-start: #1a1c23;
+        --background-end: #1f212c;
+        --container-bg: #232530;
+        --sidebar-bg: rgba(0, 0, 0, 0.1);
+        --header-bg: rgba(0, 0, 0, 0.1);
+        --input-area-bg: rgba(0, 0, 0, 0.15);
+        --input-field-bg: #1a1c23;
+        --border-color: rgba(255, 255, 255, 0.08);
+        --primary-accent: #8a63d2;
+        --primary-accent-darker: #7b58bb;
+        --secondary-accent: #4a4e69;
+        --bot-bubble-bg: #3a3d52;
+        --user-bubble-bg: #4c42a4;
+        --text-primary: #f2f2f2;
+        --text-secondary: #a9a9c2;
+        --text-on-accent: #ffffff;
+        --font-main: "Inter", "Montserrat", Arial, sans-serif;
+      }
+
+      body.light-mode {
+        --background-start: #f4f6fc;
+        --background-end: #e9ebf5;
+        --container-bg: #ffffff;
+        --sidebar-bg: #f8f9fd;
+        --header-bg: #f8f9fd;
+        --input-area-bg: #f8f9fd;
+        --input-field-bg: #ffffff;
+        --border-color: rgba(0, 0, 0, 0.08);
+        --primary-accent: #7a4fd2;
+        --primary-accent-darker: #6b45b9;
+        --secondary-accent: #d1d5e6;
+        --bot-bubble-bg: #e9ecef;
+        --user-bubble-bg: #7a4fd2;
+        --text-primary: #1c1c22;
+        --text-secondary: #6a6a7c;
+        --text-on-accent: #ffffff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: var(--font-main);
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          var(--background-start),
+          var(--background-end)
+        );
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--text-primary);
+        padding: 16px;
+        transition: background 0.3s ease;
+      }
+
+      .chatbot-wrapper {
+        display: flex;
+        width: 100%;
+        max-width: 1200px;
+        height: 90vh;
+        max-height: 800px;
+        background: var(--container-bg);
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        transition: background 0.3s ease, border-color 0.3s ease;
+      }
+
+      .sidebar {
+        width: 240px;
+        background: var(--sidebar-bg);
+        display: flex;
+        flex-direction: column;
+        padding: 24px 16px;
+        border-right: 1px solid var(--border-color);
+        flex-shrink: 0;
+        transition: background 0.3s ease, border-color 0.3s ease;
+      }
+
+      .sidebar-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .robot-image {
+        width: 80px;
+        height: 80px;
+        background: url("Actual.png") no-repeat center/cover;
+        border-radius: 50%;
+        border: 3px solid var(--primary-accent);
+        box-shadow: 0 0 15px rgba(138, 99, 210, 0.4);
+        margin-bottom: 12px;
+      }
+
+      .sidebar-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .sidebar-subtitle {
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+
+      .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+      }
+
+      .action-btn {
+        background: var(--secondary-accent);
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        font-weight: 500;
+        text-align: center;
+        color: var(--text-primary);
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+
+      .action-btn:hover {
+        background: var(--primary-accent);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(138, 99, 210, 0.3);
+      }
+
+      .theme-switch-container {
+        margin-top: auto;
+        padding-top: 20px;
+        text-align: center;
+      }
+
+      .theme-switch {
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .theme-switch-label {
+        margin-right: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-secondary);
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 22px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--secondary-accent);
+        transition: 0.4s;
+        border-radius: 22px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: var(--primary-accent);
+      }
+      input:checked + .slider:before {
+        transform: translateX(18px);
+      }
+
+      .chat-container {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .chat-header {
+        display: flex;
+        align-items: center;
+        padding: 16px 24px;
+        border-bottom: 1px solid var(--border-color);
+        flex-shrink: 0;
+        background: var(--header-bg);
+        transition: background 0.3s ease, border-color 0.3s ease;
+      }
+
+      .header-title {
+        font-weight: 600;
+        font-size: 18px;
+        color: var(--text-primary);
+      }
+
+      .user-info {
+        margin-left: auto;
+        text-align: right;
+        font-size: 13px;
+      }
+
+      .user-info strong {
+        display: block;
+        color: var(--text-primary);
+        font-weight: 500;
+      }
+
+      .user-info small {
+        color: var(--text-secondary);
+      }
+
+      .logout-btn {
+        margin-top: 6px;
+        background: var(--secondary-accent);
+        border: none;
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-weight: 500;
+        font-size: 12px;
+        color: var(--text-primary);
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
+
+      .logout-btn:hover {
+        background-color: var(--primary-accent-darker);
+      }
+
+      .chat-messages {
+        padding: 24px;
+        overflow-y: auto;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .welcome-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        text-align: center;
+        padding: 24px;
+      }
+
+      .welcome-logo {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 16px;
+        background: url("Actual.png") no-repeat center/cover;
+        border-radius: 50%;
+        border: 3px solid var(--primary-accent);
+      }
+
+      .welcome-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+      }
+
+      .welcome-subtitle {
+        font-size: 15px;
+        color: var(--text-secondary);
+        max-width: 350px;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .message {
+        display: flex;
+        flex-direction: column;
+        max-width: 75%;
+        line-height: 1.6;
+        animation: fadeInUp 0.4s ease-out;
+      }
+
+      .message-content {
+        padding: 12px 16px;
+        font-size: 15px;
+        word-wrap: break-word;
+      }
+
+      .bot-message {
+        align-self: flex-start;
+      }
+      .bot-message .message-content {
+        background: var(--bot-bubble-bg);
+        color: var(--text-primary);
+        border-radius: 18px 18px 18px 4px;
+      }
+
+      .user-message {
+        align-self: flex-end;
+      }
+      .user-message .message-content {
+        background: var(--user-bubble-bg);
+        color: var(--text-on-accent);
+        border-radius: 18px 18px 4px 18px;
+      }
+
+      .message-time {
+        font-size: 11px;
+        color: var(--text-secondary);
+        margin-top: 6px;
+      }
+
+      .bot-message .message-time {
+        align-self: flex-start;
+      }
+      .user-message .message-time {
+        align-self: flex-end;
+      }
+
+      .chat-input-area {
+        padding: 16px 24px;
+        background: var(--input-area-bg);
+        border-top: 1px solid var(--border-color);
+        transition: background 0.3s ease, border-color 0.3s ease;
+      }
+
+      .chat-input-form {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      #userInput {
+        flex-grow: 1;
+        background: var(--input-field-bg);
+        color: var(--text-primary);
+        font-size: 15px;
+        padding: 14px 18px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease,
+          background 0.3s ease;
+      }
+
+      #userInput::placeholder {
+        color: var(--text-secondary);
+      }
+
+      #userInput:focus {
+        border-color: var(--primary-accent);
+        box-shadow: 0 0 10px rgba(138, 99, 210, 0.3);
+      }
+
+      .send-button {
+        background: var(--primary-accent);
+        border: none;
+        padding: 14px 24px;
+        font-weight: 600;
+        color: var(--text-on-accent);
+        font-size: 15px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+
+      .send-button:hover {
+        background: var(--primary-accent-darker);
+        transform: scale(1.05);
+      }
+
+      .chat-messages::-webkit-scrollbar {
+        width: 8px;
+      }
+      .chat-messages::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .chat-messages::-webkit-scrollbar-thumb {
+        background-color: var(--secondary-accent);
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chatbot-wrapper" role="main">
+      <aside class="sidebar" aria-label="Character and actions">
+        <div class="sidebar-header">
+          <div class="robot-image" role="img" aria-label="Robot avatar"></div>
+          <h2 class="sidebar-title">STUDENT GPT</h2>
+          <p class="sidebar-subtitle">Your AI Assistant</p>
+        </div>
+        <div class="action-buttons" role="toolbar">
+          <button class="action-btn" type="button">PLANNING</button>
+          <button class="action-btn" type="button">BUILDING</button>
+          <button class="action-btn" type="button">MONITORING</button>
+        </div>
+
+        <div class="theme-switch-container">
+          <label class="theme-switch">
+            <span class="theme-switch-label">Light</span>
+            <div class="switch">
+              <input type="checkbox" id="theme-toggle" />
+              <span class="slider"></span>
+            </div>
+          </label>
+        </div>
+      </aside>
+
+      <section class="chat-container">
+        <header class="chat-header">
+          <h2 class="header-title">Conversation</h2>
+          <div class="user-info">
+            <strong id="userName"></strong>
+            <small id="userEmail"></small>
+            <button id="logoutBtn" class="logout-btn" type="button">
+              Logout
+            </button>
+          </div>
+        </header>
+
+        <div class="chat-messages" id="messages" aria-live="polite">
+          <div class="welcome-container" id="welcome-container">
+            <div class="welcome-logo"></div>
+            <h2 class="welcome-title">Welcome to Student GPT</h2>
+            <p class="welcome-subtitle">
+              Ask me anything about your project, get help with your code, or
+              brainstorm new ideas.More features coming soon! Developer:-
+              @sagarxkamboj
+            </p>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <form class="chat-input-form" id="chatForm" autocomplete="off">
+            <input
+              type="text"
+              id="userInput"
+              placeholder="Ask me anything..."
+              required
+            />
+            <button class="send-button" type="submit" aria-label="Send message">
+              Send
+            </button>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <!-- Load chatbot client script -->
+    <script src="chatbot.js"></script>
+  </body>
+</html>
