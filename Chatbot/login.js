@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const modeBtn = document.getElementById("mode-btn");
   const API_URL = "https://student-gpt.onrender.com/login";
 
-
   // Apply saved theme on load
   try {
     const savedTheme = localStorage.getItem("theme");
@@ -85,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // show success feedback then redirect
       alert("Login successful");
-      window.location.href = "index.html";
+      window.location.href = "chatbot.html";
     } catch (err) {
       console.error("Login error:", err);
       alert("Login failed: " + (err.message || "Check console for details."));
