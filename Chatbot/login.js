@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const passInput = document.getElementById("login-password");
   const submitBtn = form.querySelector('button[type="submit"]');
   const modeBtn = document.getElementById("mode-btn");
-  const API_URL = "http://localhost:4000/login";
+  const API_URL = "https://student-gpt.onrender.com/login";
+
 
   // Apply saved theme on load
   try {
