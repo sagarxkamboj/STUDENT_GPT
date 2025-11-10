@@ -1,3 +1,8 @@
+// 🔹 Wake up backend before any user action
+fetch("https://student-gpt.onrender.com/ping")
+  .then(() => console.log("✅ Backend is awake!"))
+  .catch(() => console.log("⚠️ Wake-up ping failed (ignore if first load)"));
+
 document.addEventListener("DOMContentLoaded", () => {
   const navMenu = document.querySelector(".nav-menu");
   const hamburger = document.querySelector(".hamburger");
