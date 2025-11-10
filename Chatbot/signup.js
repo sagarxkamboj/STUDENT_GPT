@@ -1,3 +1,8 @@
+// 🔹 Wake up backend before sending OTP or creating account
+fetch("https://student-gpt.onrender.com/ping")
+  .then(() => console.log("✅ Backend is awake for signup"))
+  .catch(() => console.log("⚠️ Wake-up ping failed (ignore if first load)"));
+
 document
   .getElementById("signupForm")
   .addEventListener("submit", async function (e) {
