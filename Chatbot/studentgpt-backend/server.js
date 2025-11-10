@@ -210,6 +210,11 @@ app.post("/login", async (req, res) => {
     res.status(500).send("Server error");
   }
 });
+/*ping pong added for smooth backend monitoring*/
+app.get("/ping", (req, res) => {
+  console.log("⚡ Ping received — backend awake!");
+  res.status(200).send("pong");
+});
 
 /* ---------------------
    Password Reset
