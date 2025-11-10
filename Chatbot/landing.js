@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔹 Show correct nav actions based on login status
   if (localStorage.getItem("token")) {
     navActions.innerHTML = `
-      <a href="index.html" class="nav-signin">Chatbot</a>
+      <a href="chatbot.html" class="nav-signin">Chatbot</a>
       <a href="#" id="logoutBtn" class="nav-signin">Logout</a>
     `;
 
