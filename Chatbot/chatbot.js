@@ -62,7 +62,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (emailEl) emailEl.textContent = email || "";
 
   // --- API URL ---
-  const CHATBOT_API_URL = "http://localhost:4000/chatbot-api-endpoint";
+  const CHATBOT_API_URL =
+    "https://student-gpt.onrender.com/chatbot-api-endpoint";
 
   // --- Theme Handling ---
   const applyTheme = (theme) => {
