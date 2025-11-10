@@ -23,7 +23,7 @@ document
     }
 
     try {
-      const res = await fetch("http://localhost:4000/signup", {
+      const res = await fetch("https://student-gpt.onrender.com/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, phone, password }),
