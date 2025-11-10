@@ -23,7 +23,7 @@ document.getElementById("reset-form").onsubmit = async function (e) {
   if (!email || !otp || !newPassword) return setMsg("Fill all fields.");
   setMsg("Resetting...");
   try {
-    const res = await fetch("http://localhost:4000/reset-password", {
+    const res = await fetch("https://student-gpt.onrender.com/reset-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, otp, newPassword }),
