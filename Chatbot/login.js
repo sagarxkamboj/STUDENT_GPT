@@ -1,3 +1,8 @@
+// 🔹 Wake backend before login
+fetch("https://student-gpt.onrender.com/ping")
+  .then(() => console.log("✅ Backend awake for login"))
+  .catch(() => console.log("⚠️ Wake-up failed (ignore if first load)"));
+
 document.addEventListener("DOMContentLoaded", () => {
   "use strict";
 
