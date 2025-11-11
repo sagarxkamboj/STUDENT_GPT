@@ -3,7 +3,7 @@ document.getElementById("send-otp").onclick = async function () {
   if (!email) return setMsg("Enter your registered email.");
   setMsg("Sending OTP...");
   try {
-    const res = await fetch("http://localhost:4000/forgot-password", {
+    const res = await fetch("https://student-gpt.onrender.com/forgot-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
@@ -38,3 +38,4 @@ document.getElementById("reset-form").onsubmit = async function (e) {
 function setMsg(msg) {
   document.getElementById("msg").innerText = msg;
 }
+
